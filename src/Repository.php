@@ -67,6 +67,34 @@ class Repository
         });
     }
 
+    public function getProvincesByName(string $name): array
+    {
+        return $this->mapCsv('provinces.csv', ['id', 'name'], function ($row) use ($name) {
+            return stripos($row[1], $name) !== false;
+        });
+    }
+    
+    public function getRegenciesByName(string $name): array
+    {
+        return $this->mapCsv('regencies.csv', ['id', 'province_id', 'name'], function ($row) use ($name) {
+            return stripos($row[2], $name) !== false;
+        });
+    }
+    
+    public function getDistrictsByName(string $name): array
+    {
+        return $this->mapCsv('districts.csv', ['id', 'regency_id', 'name'], function ($row) use ($name) {
+            return stripos($row[2], $name) !== false;
+        });
+    }
+    
+    public function getVillagesByName(string $name): array
+    {
+        return $this->mapCsv('villages.csv', ['id', 'district_id', 'name'], function ($row) use ($name) {
+            return stripos($row[2], $name) !== false;
+        });
+    }
+
     protected function mapCsv(string $file, array $map, callable $filter = null): array
     {
         $reader = $this->readCsv($file, $filter);
